@@ -30,6 +30,8 @@ Translate or review Siglus `.ss.csv` packets safely and to a high literary stand
 - translate by the agent's own reasoning
 - never use machine translation or translation-generation tooling
 - local tools may be used only for packet setup, copying, safe writeback, diffing, and validation
+- when operating on Windows, avoid PowerShell as the primary read-write path for `.ss.csv` whenever another deterministic local tool is available
+- if PowerShell must be used in a Windows environment, treat the writeback as high-risk until the file has been re-opened and verified clean from disk
 - keep packet artifacts text-only
 
 ## Autonomy
@@ -39,6 +41,8 @@ Operate with minimal user interaction.
 Ask the user only when a kana-containing proper noun needs a target hanzi form that cannot be inferred responsibly from local context.
 
 Do not escalate generic role labels or descriptive speaker tags. Translate them directly into natural Mainland Chinese.
+
+When writeback method is relevant on Windows, explicitly warn the user that PowerShell is a higher-risk path for `.ss.csv` encoding and recommend avoiding it when possible.
 
 ## Packet Model
 
@@ -141,6 +145,7 @@ Validation must confirm both:
 
 - only intended script-surface rows were translated
 - no menu, system, UI, or support rows were altered
+- the on-disk file remains readable after writeback with no encoding corruption
 
 ## Collaboration
 

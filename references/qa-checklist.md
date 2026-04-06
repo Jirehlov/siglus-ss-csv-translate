@@ -15,6 +15,8 @@ Confirm that:
 - menu items, choice buttons, system prompts, config text, debug text, identifiers, and support rows remain untouched
 - row count, row order, and structural columns are unchanged
 - the written file can be re-opened successfully after writeback
+- on Windows, PowerShell was avoided for the `.ss.csv` write path whenever a safer local tool was available
+- if PowerShell was used, the file was treated as untrusted until a clean readback check passed
 
 ## Language Surface Gate
 
@@ -28,6 +30,9 @@ By default, check for:
 - no unintended Latin letters
 - no unintended Arabic numerals
 - no placeholder corruption
+- no mojibake
+- no unexpected replacement characters
+- no unintended fallback to question marks
 
 If the user explicitly requested exceptions, apply those exceptions deliberately rather than by accident.
 
@@ -65,6 +70,7 @@ Confirm that:
 
 - perform the final validation after writes are complete
 - validate by re-reading the written file directly
+- validate the file from disk with the intended encoding rather than by console appearance
 - treat unstable or partial observations as incomplete validation and rerun the check deterministically
 
 Do not mark a packet ready until every applicable gate passes.

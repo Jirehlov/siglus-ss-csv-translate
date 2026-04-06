@@ -40,6 +40,10 @@ Local deterministic tools may be used only for:
 
 Do not let tooling decide the wording of the translation.
 
+On Windows, avoid PowerShell as the primary read-write path for `.ss.csv` whenever another deterministic local tool is available.
+
+If PowerShell must be used, treat the writeback as unsafe until the file has been re-opened from disk and verified clean.
+
 ## Row Mutability Policy
 
 Row kind is a strong hint, not a complete mutability definition.
@@ -80,11 +84,25 @@ Before translation or review edits:
 
 Packet artifacts should remain text-based and easy to inspect.
 
+## Writeback Safety Policy
+
+Encoding safety is part of correctness.
+
+After any writeback:
+
+- re-open the file from disk using the intended encoding rather than trusting terminal output
+- confirm that the written Chinese text survived the write intact
+- confirm there is no mojibake, replacement-character corruption, or unintended fallback to question marks
+- prefer encoding-stable local tooling over shell-native text rewrite paths
+- on Windows, prefer not to use PowerShell for the actual `.ss.csv` write path unless there is no cleaner option
+
 ## Autonomy Policy
 
 Operate with minimal user interaction.
 
 The routine reason to ask the user is unresolved kana proper-noun hanzi confirmation.
+
+When writeback method becomes part of the discussion on Windows, warn the user that PowerShell is a higher-risk path for `.ss.csv` encoding and recommend avoiding it when possible.
 
 For all other uncertainty:
 
