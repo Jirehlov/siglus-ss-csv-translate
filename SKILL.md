@@ -1,6 +1,6 @@
 ---
 name: siglus-ss-csv-translate
-description: Translate and review SiglusEngine `.ss.csv` packets into Mainland China simplified Chinese for galgame workflows. Use when only `replacement` may be edited, only `kind=1` and `kind=2` rows are writable, scene order controls reveal timing, split lines must be reconstructed at line level, and packet-local state is required for safe resume and collaboration.
+description: Translate and review SiglusEngine `.ss.csv` script packets into Mainland China simplified Chinese for galgame workflows. Use when only `replacement` may be edited, translatable rows must be identified by whether they belong to the running story script rather than row kind alone, `kind=3` may contain narration-like script lines, menu and system text must remain untouched, scene order controls reveal timing, split lines must be reconstructed at line level, and packet-local state is required for safe resume and collaboration.
 ---
 
 # Siglus SS CSV Translate
@@ -16,8 +16,14 @@ Translate or review Siglus `.ss.csv` packets safely and to a high literary stand
 ## Non-Negotiable Constraints
 
 - edit only `replacement`
-- edit only rows where `kind` is `1` or `2`
-- never modify any `kind=3` row
+- do not treat row kind as the sole definition of translatability
+- translate only rows that belong to the running story script: dialogue, narration, interior monologue, and speaker labels attached to those lines
+- do not translate menu items, choice buttons, system prompts, config text, debug text, scene IDs, file names, resource names, or other non-script interface text
+- treat `kind=1` and `kind=2` as the default translatable set only when they serve the running script surface
+- treat `kind=3` as read-only by default, except when local packet evidence or explicit project knowledge shows that a subset of `kind=3` rows are actually script lines
+- for `kind=3`, apply a script-surface gate before anything else: if the row does not look like a Japanese sentence or line that would be read as part of the running story, treat it as non-translatable
+- if a `kind=3` row contains no Japanese characters at all, treat it as non-translatable unless the user explicitly states otherwise
+- never modify menu, system, control, structure, UI, or inline support rows
 - never reorder, insert, or delete rows
 - never rewrite structural columns
 - never edit the original source `.ss.csv` in place
@@ -70,9 +76,9 @@ Use the mode that matches the user request.
 
 1. Prepare or enter the packet folder.
 2. Confirm scene order and neighboring files before drafting.
-3. Load packet state and current term governance.
-4. Translate `kind=2` names first.
-5. Translate `kind=1` text at the semantic-line level, not fragment-by-fragment.
+3. Load packet state, current term governance, and the packet's effective translatable-row set.
+4. Translate speaker labels and other stable name-bearing rows that belong to the running script first.
+5. Translate dialogue and narration at the semantic-line level, not fragment-by-fragment.
 6. Record only decision-critical notes.
 7. Run the full QA checklist before considering the packet ready.
 8. Refresh `progress.csv` and `handoff.md`.
@@ -103,6 +109,8 @@ Never trade away meaning, reveal timing, or character voice for surface elegance
 ## Core Translation Method
 
 - treat filename order as narrative metadata
+- identify translatable rows by script-surface function, not by kind value alone
+- for `kind=3`, start by asking whether the row behaves like a Japanese line in the running story rather than a menu, system, control, or support row
 - preserve uncertainty until the scene has earned clarification
 - translate one local exchange as a unit when setup and payoff span adjacent lines
 - treat same-line `kind=1` fragments as one semantic unit unless strong evidence says otherwise
@@ -128,6 +136,11 @@ Every packet must pass a deterministic QA pass before it is considered ready.
 Validation is not optional after either translation or review.
 
 Do not trust console appearance alone. Validate by re-reading the written file.
+
+Validation must confirm both:
+
+- only intended script-surface rows were translated
+- no menu, system, UI, or support rows were altered
 
 ## Collaboration
 

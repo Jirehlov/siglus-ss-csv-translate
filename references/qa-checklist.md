@@ -7,8 +7,12 @@ Run this checklist after translation and again after review.
 Confirm that:
 
 - only `replacement` was edited
-- only `kind=1` and `kind=2` rows were changed
-- `kind=3` rows remain untouched
+- only intended running-script rows were changed
+- row kind was not used as the sole mutability test
+- any translated `kind=3` rows first passed the script-line Japanese surface-text gate
+- any `kind=3` rows with no Japanese characters were left untouched unless the user explicitly required otherwise
+- any translated `kind=3` rows are confirmed to be running-story dialogue, narration, or interior monologue
+- menu items, choice buttons, system prompts, config text, debug text, identifiers, and support rows remain untouched
 - row count, row order, and structural columns are unchanged
 - the written file can be re-opened successfully after writeback
 
@@ -38,6 +42,7 @@ Spot-check whether the packet still preserves:
 - setup-payoff linkage
 - reveal timing
 - ambiguity where ambiguity is still required
+- script narration carried in non-default row kinds, when applicable
 
 ## Term Consistency Gate
 

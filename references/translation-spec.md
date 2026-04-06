@@ -40,6 +40,34 @@ Local deterministic tools may be used only for:
 
 Do not let tooling decide the wording of the translation.
 
+## Row Mutability Policy
+
+Row kind is a strong hint, not a complete mutability definition.
+
+Default assumptions:
+
+- `kind=1` is normally running-script text
+- `kind=2` is normally running-script speaker labeling
+- `kind=3` is normally read-only support content
+
+However, do not hard-code mutability from row kind alone.
+
+If local packet evidence or project knowledge shows that a subset of `kind=3` rows are actually running-script dialogue, narration, or interior monologue, treat those rows as translatable.
+
+If a `kind=3` row is acting as a menu item, choice button, system prompt, config text, debug text, identifier, control text, structure, hidden support content, or any other non-script layer, keep it read-only.
+
+The real boundary is running-story script text versus menu, system, UI, and support text.
+
+For `kind=3`, use this priority order:
+
+1. check whether the row visibly behaves like a Japanese line of dialogue, narration, or interior monologue that would be read as part of the running story
+2. if it instead behaves like a menu item, choice button, system prompt, config line, debug line, identifier, or other interface text, treat it as non-translatable for this skill
+3. if it does not look sentence-like or script-like, treat it as non-translatable
+4. if it contains no Japanese characters at all, treat it as non-translatable unless the user explicitly instructs otherwise
+5. only after passing that gate, judge whether it belongs to the running script surface or to support structure
+
+This gate is intentionally conservative. A row kind that is usually structural should not be translated merely because it has a writable `replacement` field.
+
 ## Working Copy Policy
 
 Never edit the original source `.ss.csv` in place.
@@ -127,6 +155,8 @@ Do not translate fragments as if they were standalone lines.
 
 If context supports only tone or force but not a specific hidden word, preserve that uncertainty instead of inventing a false concrete reading.
 
+When a running-script line is distributed across multiple rows of mixed kinds, reconstruct the full visible unit first and then write back only into the rows that belong to the translatable script surface under the current packet's mutability rules.
+
 ## Local Exchange Policy
 
 Do not solve risky lines in isolation when adjacent replies carry the payoff.
@@ -212,10 +242,10 @@ A packet is not ready until it passes both structural and language validation.
 
 Minimum validation expectations:
 
-- only allowed rows changed
+- only intended running-script rows changed
 - row count and order unchanged
 - disallowed columns unchanged
-- `kind=3` untouched
+- no menu, system, UI, or support rows altered
 - output file readable after writeback
 - translated text respects target-language constraints
 - packet state files refreshed to match the current stage

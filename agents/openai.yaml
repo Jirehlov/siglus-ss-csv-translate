@@ -1,4 +1,4 @@
 interface:
   display_name: "Siglus CSV Translate"
-  short_description: "Translate Siglus .ss.csv dialogue and speaker names safely."
-  default_prompt: "Use $siglus-ss-csv-translate to translate or review a Siglus .ss.csv packet in Mainland China simplified Chinese, preserve reveal pacing and line-level rhetoric, reconstruct split lines safely, maintain packet-local state for resume, govern terms through explicit status tracking, use local tools only for setup and validation, and finish with a deterministic QA pass."
+  short_description: "Translate Siglus .ss.csv script lines safely."
+  default_prompt: "Use $siglus-ss-csv-translate to translate or review a Siglus .ss.csv packet in Mainland China simplified Chinese, identify translatable rows by whether they belong to the running story script rather than row kind alone, treat Japanese `kind=3` rows as translatable only when they are actual dialogue, narration, or interior monologue, leave menu, choice, system, config, debug, identifier, and other non-script text untouched, preserve reveal pacing and line-level rhetoric, reconstruct split lines safely, maintain packet-local state for resume, govern terms through explicit status tracking, use local tools only for setup and validation, and finish with a deterministic QA pass."
