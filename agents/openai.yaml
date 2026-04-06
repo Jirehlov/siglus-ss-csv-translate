@@ -1,0 +1,4 @@
+interface:
+  display_name: "Siglus CSV Translate"
+  short_description: "Translate Siglus .ss.csv dialogue and speaker names safely."
+  default_prompt: "Use $siglus-ss-csv-translate to translate or review a Siglus .ss.csv packet in Mainland China simplified Chinese, preserve reveal pacing and line-level rhetoric, reconstruct split lines safely, maintain packet-local state for resume, govern terms through explicit status tracking, use local tools only for setup and validation, and finish with a deterministic QA pass."
