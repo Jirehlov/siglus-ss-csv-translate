@@ -12,10 +12,12 @@ Confirm that:
 - any translated `kind=3` rows first passed the script-line Japanese surface-text gate
 - any `kind=3` rows with no Japanese characters were left untouched unless the user explicitly required otherwise
 - any translated `kind=3` rows are confirmed to be running-story dialogue, narration, or interior monologue
+- any readable `kind=3` choice clusters remained untouched unless project evidence proved they were running-story surface text rather than option rows
 - menu items, choice buttons, system prompts, config text, debug text, identifiers, and support rows remain untouched
 - row count, row order, and structural columns are unchanged
 - the written file can be re-opened successfully after writeback
 - on Windows, PowerShell was avoided for the `.ss.csv` write path whenever a safer local tool was available
+- on Windows, non-ASCII translation payloads were not pushed through PowerShell console text or shell pipelines when a safer file-based or direct write path was available
 - if PowerShell was used, the file was treated as untrusted until a clean readback check passed
 
 ## Language Surface Gate
@@ -65,6 +67,7 @@ Confirm that:
 - `progress.csv` matches the packet's real stage
 - `handoff.md` matches the packet's real resume point and risk profile
 - `translation-notes.csv` reflects non-obvious decisions and meaningful review changes
+- if `claims.csv` is in use, it matches the packet's real owner, stage, and next action
 
 ## Validation Method
 
